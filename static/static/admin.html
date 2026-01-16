@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>管理员上传工资表</title>
+</head>
+<body>
+  <h2>管理员上传工资 Excel</h2>
+
+  <input id="pwd" type="password" placeholder="管理员口令"><br><br>
+  <input id="file" type="file"><br><br>
+  <button onclick="upload()">上传</button>
+
+  <pre id="status"></pre>
+
+<script>
+async function upload(){
+  const pwd = document.getElementById("pwd").value;
+  const file = document.getElementById("file").files[0];
+  if(!pwd || !file){ alert("请输入口令并选择文件"); return; }
+
+  const form = new FormData();
+  form.append("password", pwd);
+  form.append("replace_all", "true");
+  form.append("file", file);
+
+  const resp = await fetch("/api/admin/upload", { method:"POST", body: form });
+  const json = await resp.json();
+  document.getElementById("status").textContent = JSON.stringify(json, null, 2);
+}
+</script>
+</body>
+</html>
