@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title>工资明细查询</title>
+</head>
+<body>
+  <h2>工资明细查询</h2>
+  <input id="card" placeholder="请输入银行卡号" />
+  <button onclick="query()">查询</button>
+  <pre id="result"></pre>
+
+<script>
+async function query(){
+  const card = document.getElementById("card").value.trim();
+  if(!card){ alert("请输入银行卡号"); return; }
+  const resp = await fetch(`/api/query?card=${encodeURIComponent(card)}`);
+  const json = await resp.json();
+  document.getElementById("result").textContent =
+    json.count ? JSON.stringify(json.records, null, 2) : "未查询到记录";
+}
+</script>
+</body>
+</html>
